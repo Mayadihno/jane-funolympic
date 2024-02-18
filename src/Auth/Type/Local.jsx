@@ -29,6 +29,7 @@ const Local = ({ setActive }) => {
           size: "invisible",
           callback: (response) => {
             onSignup();
+
             console.log(response);
           },
           "expired-callback": () => {},
@@ -36,9 +37,9 @@ const Local = ({ setActive }) => {
       );
     }
     // Set appVerificationDisabledForTesting property
-    auth.appVerificationDisabledForTesting = true;
+    // auth.appVerificationDisabledForTesting = true;
+    auth.appVerificationDisabledForTesting = false;
   };
-
   function onSignup() {
     setLoading(true);
     onCaptchVerify();
@@ -61,6 +62,9 @@ const Local = ({ setActive }) => {
           toast.error("Invalid Phone Number");
         }
         if (error.code === "auth/too-many-requests") {
+          toast.error(
+            "Too many authentication attempts. Please try again later."
+          );
           console.error(
             "Too many authentication attempts. Please try again later."
           );
