@@ -13,6 +13,7 @@ import Dashboard from "./Admin/Dashboard";
 import Gallery from "./Gallery/Gallery";
 import Video from "./Videos/Video";
 import Fixture from "./Fixtures/Fixture";
+import BookedGame from "./Users/BookedGame";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/booked" element={<BookedGame />} />
         <Route path="/*" element={<PRoute />}>
           <Route path="/*/dashboard" element={<Dashboard />} />
           <Route path="/*/gallery" element={<Gallery />} />

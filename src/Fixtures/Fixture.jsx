@@ -23,6 +23,9 @@ const Fixture = () => {
   const [sport, setSport] = useState("");
   const [admin, setAdmin] = useState(false);
   const [categories, setCategories] = useState("");
+  const [bookedGames, setBookedGames] = useState(
+    JSON.parse(localStorage.getItem("bookedGames")) || []
+  );
   const navigate = useNavigate();
 
   const userDocREf = query(collection(db, "fixtures"), orderBy("time", "asc"));
@@ -44,6 +47,28 @@ const Fixture = () => {
       setCategories(queryData);
     }
   };
+  const handleBooking = (id) => {
+    const gameDate = new Date(id.date);
+    // Check if the game is in the past
+    if (gameDate < new Date()) {
+      toast.error("You can't book this game as it's in the past.");
+    } else {
+      // Check if the game is already booked
+      const bookedGames = JSON.parse(localStorage.getItem("bookedGames")) || [];
+      if (bookedGames.some((game) => game.id === id.id)) {
+        toast.warning("You have already booked this game.");
+      } else {
+        // Proceed with booking logic
+        console.log("Game can be booked.");
+        const updatedBookedGames = [...bookedGames, id];
+        localStorage.setItem("bookedGames", JSON.stringify(updatedBookedGames));
+        setBookedGames(updatedBookedGames);
+
+        toast.success("Game successfully booked.");
+      }
+    }
+  };
+
   useEffect(() => {
     getFunc();
     getCategories();
@@ -112,6 +137,25 @@ const Fixture = () => {
       minWidth: 130,
       flex: 0.8,
     },
+    {
+      field: "Book Game",
+      flex: 0.1,
+      minWidth: 100,
+      headerName: "Book Game",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleBooking(params.row)}
+          >
+            Book
+          </Button>
+        );
+      },
+    },
   ];
   if (admin) {
     columns.push(deleteButtonColumn);
@@ -139,7 +183,7 @@ const Fixture = () => {
   return (
     <React.Fragment>
       <div
-        className={`800px:w-11/12 800px:mx-auto 800px:my-10 my-20 w-full px-0.5 h-[70vh]`}
+        className={`800px:w-11/12 800px:mx-auto 800px:my-20 my-20 w-full px-0.5 h-[70vh]`}
       >
         <h2 className="text-center text-[20px] font-[700] mb-2">
           Payris Funolympics Fixtures
@@ -184,7 +228,7 @@ const Fixture = () => {
             </div>
           </form>
         </div>
-        <div className="w-full pt-1 bg-white mt-10">
+        <div className="w-full pt-1 bg-white mb-10 mt-2 h-[300px] overflow-y-scroll">
           <DataGrid
             rows={rows}
             columns={columns}

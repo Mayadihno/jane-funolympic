@@ -2,7 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +38,27 @@ const Users = () => {
       console.log(error.message);
     }
   };
+
+  const handleAddAsAdmin = async (id) => {
+    console.log(id.uid);
+    try {
+      if (id.role === "user") {
+        // Update the role to 'admin'
+        id.role = "admin";
+        // Update the user's data in Firestore
+        await setDoc(doc(db, "users", id.id), id);
+        toast.success("User role updated to admin successfully.");
+      } else {
+        // User is already an admin
+        toast.info("User is already an admin.");
+      }
+      console.log(id);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      toast.error("Failed to update user role. Please try again.");
+    }
+  };
+
   const columns = [
     { field: "id", headerName: "User ID", minWidth: 150, flex: 0.7 },
 
@@ -67,11 +94,38 @@ const Users = () => {
       minWidth: 130,
       flex: 0.8,
     },
+    {
+      field: "role",
+      headerName: "Role",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
+      field: " Add as admin",
+      flex: 1,
+      minWidth: 100,
+      headerName: "Add as admin",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAddAsAdmin(params.row)}
+            >
+              Add
+            </Button>
+          </>
+        );
+      },
+    },
 
     {
       field: " ",
       flex: 1,
-      minWidth: 50,
+      minWidth: 100,
       headerName: "",
       type: "number",
       sortable: false,
@@ -97,6 +151,7 @@ const Users = () => {
     fullName: item?.fullName,
     phone: item?.phone || item?.phoneNumber,
     country: item?.country,
+    role: item?.role,
   }));
   return (
     <React.Fragment>

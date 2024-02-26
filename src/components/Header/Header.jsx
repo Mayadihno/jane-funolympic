@@ -44,6 +44,17 @@ const Header = () => {
       toast.error("Please login to watch live event");
     }
   };
+
+  const handleBooked = (e) => {
+    e.preventDefault();
+    setActive(2);
+    if (phoneUser) {
+      setActive(7);
+      navigate("/booked");
+    } else {
+      toast.error("Please login to see booked game");
+    }
+  };
   return (
     <React.Fragment>
       <div
@@ -131,7 +142,7 @@ const Header = () => {
                   </NavLink>
                 </>
               )}
-              {userData?.role === "admin" && (
+              {userData?.role === "admin" ? (
                 <NavLink
                   to={"/dashboard"}
                   className={`${
@@ -142,6 +153,18 @@ const Header = () => {
                   onClick={() => setActive(7)}
                 >
                   Dashboard
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={"/dashboard"}
+                  className={`${
+                    active === 7
+                      ? "bg-gray-400 px-2 py-1 rounded-[4px] font-Roboto font-[700]"
+                      : "font-Poppins font-[600] tracking-wide hover:border-b-2 hover:text-red-600"
+                  }`}
+                  onClick={handleBooked}
+                >
+                  Booked Game
                 </NavLink>
               )}
               {userData || phoneUser ? (
