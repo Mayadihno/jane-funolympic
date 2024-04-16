@@ -14,6 +14,7 @@ import { doc, setDoc } from "firebase/firestore";
 
 const Local = ({ setActive }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [user, setUser] = useState(null);
@@ -82,6 +83,7 @@ const Local = ({ setActive }) => {
 
         await setDoc(doc(db, "users", res.user.uid), {
           phoneNumber: res.user.phoneNumber,
+          fullName: fullName,
         });
       })
       .catch((err) => {
@@ -114,9 +116,30 @@ const Local = ({ setActive }) => {
               {!user && (
                 <div className="phone__content">
                   {!showOTP ? (
-                    <Card className="text-center">
+                    <Card className="">
                       <CardContent>
-                        <h1 className="text-[16px] font-[600] font-Poppins pb-6">
+                        <div className="">
+                          <label
+                            htmlFor="name"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Full Name <span className="text-red-500">*</span>
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              name="name"
+                              id="name"
+                              required
+                              placeholder="Full name"
+                              autoComplete="fullName"
+                              value={fullName}
+                              onChange={(e) => setFullName(e.target.value)}
+                              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            />
+                          </div>
+                        </div>
+                        <h1 className="block text-sm font-medium text-gray-700 pt-6 pb-1">
                           Sign In with UK phone number
                         </h1>
                         <div className="icons"></div>

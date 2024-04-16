@@ -10,6 +10,7 @@ const UploadFixtures = () => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [sport, setSport] = useState("");
+  const [odd, setOdd] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ const UploadFixtures = () => {
       time: time,
       timeStamp: serverTimestamp(),
       sport: sport, // Include the sport information
+      odd,
     };
     try {
       await setDoc(doc(db, "fixtures", `${Date.now()}`), formData);
@@ -40,15 +42,12 @@ const UploadFixtures = () => {
         {loading && (
           <Loader text={"Fixture uploading don't refresh the page"} />
         )}
-        <form onSubmit={handleSubmit} className="px-3">
+        <form onSubmit={handleSubmit} className="px-3 space-y-4">
           <h2 className=" text-[16px] font-[600] font-Poppins pt-4 text-center">
             Upload the Fixtures of the day
           </h2>
           <div className="">
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label className="block text-sm font-medium text-gray-700">
               Match Fixtures name
             </label>
             <div className="mt-1">
@@ -63,10 +62,7 @@ const UploadFixtures = () => {
             </div>
           </div>
           <div className="">
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label className="block text-sm font-medium text-gray-700">
               Match Fixtures date
             </label>
             <div className="mt-1">
@@ -81,10 +77,7 @@ const UploadFixtures = () => {
             </div>
           </div>
           <div className="">
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label className="block text-sm font-medium text-gray-700">
               Match Fixtures time
             </label>
             <div className="mt-1">
@@ -94,6 +87,24 @@ const UploadFixtures = () => {
                 autoComplete="date"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          <div className="">
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Match Odd<span className="text-red-500">*</span>
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                required
+                value={odd}
+                placeholder="1.56(home)  ---  4.67(away)"
+                onChange={(e) => setOdd(e.target.value)}
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>

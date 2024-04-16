@@ -40,7 +40,6 @@ const Users = () => {
   };
 
   const handleAddAsAdmin = async (id) => {
-    console.log(id.uid);
     try {
       if (id.role === "user") {
         // Update the role to 'admin'
@@ -52,9 +51,23 @@ const Users = () => {
         // User is already an admin
         toast.info("User is already an admin.");
       }
-      console.log(id);
     } catch (error) {
-      console.error("Error updating user role:", error);
+      toast.error("Failed to update user role. Please try again.");
+    }
+  };
+  const handleRemoveAsAdmin = async (id) => {
+    try {
+      if (id.role === "admin") {
+        // Update the role to 'admin'
+        id.role = "user";
+        // Update the user's data in Firestore
+        await setDoc(doc(db, "users", id.id), id);
+        toast.success("Admin role updated to user successfully.");
+      } else {
+        // User is already an admin
+        toast.info("User is already an admin.");
+      }
+    } catch (error) {
       toast.error("Failed to update user role. Please try again.");
     }
   };
@@ -110,13 +123,23 @@ const Users = () => {
       renderCell: (params) => {
         return (
           <>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleAddAsAdmin(params.row)}
-            >
-              Add
-            </Button>
+            {params.row?.role === "admin" ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleRemoveAsAdmin(params.row)}
+              >
+                Remove
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleAddAsAdmin(params.row)}
+              >
+                Add
+              </Button>
+            )}
           </>
         );
       },

@@ -124,17 +124,23 @@ const Fixture = () => {
       minWidth: 90,
       flex: 0.7,
     },
+    {
+      field: "matchOdd",
+      headerName: "Match Odd",
+      minWidth: 130,
+      flex: 0.8,
+    },
 
     {
       field: "sport",
       headerName: "Sport",
-      minWidth: 130,
+      minWidth: 80,
       flex: 0.8,
     },
     {
       field: "time",
       headerName: "Time",
-      minWidth: 130,
+      minWidth: 100,
       flex: 0.8,
     },
     {
@@ -171,6 +177,7 @@ const Fixture = () => {
         date: item?.date,
         matchFixtures: item?.matchFixtures,
         time: item?.time,
+        matchOdd: item?.odd,
       }))
     : post?.map((item) => ({
         id: item?.id,
@@ -178,6 +185,7 @@ const Fixture = () => {
         date: item?.date,
         matchFixtures: item?.matchFixtures,
         time: item?.time,
+        matchOdd: item?.odd,
       })) || [];
 
   return (
