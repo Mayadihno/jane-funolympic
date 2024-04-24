@@ -15,7 +15,7 @@ const Admin = ({ setActive }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email !== "mayadihno@gmail.com") {
+    if (email !== "janennekachukwurah@gmail.com") {
       toast.error("incorrect email or password");
       toast.warning("Only admin can login through this page");
       return;
